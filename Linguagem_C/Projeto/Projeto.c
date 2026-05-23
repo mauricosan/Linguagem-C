@@ -166,7 +166,7 @@ int clientRegistration(
     // email
     newClient->totalEmails = 1;
     newClient->emails = malloc(sizeof(char*)); //criando um espaço na memória
-    newClient->emails[0] = malloc(strlen(email) + 1); //alocação dinâmica
+    newClient->emails[0] = malloc(strlen(email) + 1); //aloc dinâmica
     strcpy(newClient->emails[0], email); // colocando no primeiro índice
 
     // phone
@@ -194,7 +194,7 @@ int validateCPF(char *cpf)
         }
     }
 
-    // evita CPF ex 11111111111
+    // evita cpf com num unico
     int iguais = 1;
     for (int i = 1; i < 11; i++)
     {
@@ -669,7 +669,6 @@ int updateStudent(client *clients, char *cpf, int totalClients)
                         //lê o email digitado
                         fgets(temp, sizeof(temp), stdin);
 
-                        // remove o \n
                         temp[strcspn(temp, "\n")] = '\0';
 
                         // aloca memória exata para esse email
@@ -725,9 +724,8 @@ int updateStudent(client *clients, char *cpf, int totalClients)
                 case 6: {
                         char tempName[100];
 
-                        // limpa buffer antes do fgets
                         int c;
-                        while ((c = getchar()) != '\n' && c != EOF);
+                        while ((c = getchar()) != '\n' && c != EOF);//limpa o buffer antes de ler a string
 
                         printf("Novo nome: ");
                         fgets(tempName, sizeof(tempName), stdin);
@@ -860,7 +858,6 @@ void removeStudent(client **clients, int *totalClients, char *cpf)
             printf("Cliente encontrado: %s\n", (*clients)[i].name);
             printf("Removendo cliente...\n");
 
-            // Libera memória do cliente
             free((*clients)[i].name);
             free((*clients)[i].cpf);
 
@@ -870,23 +867,23 @@ void removeStudent(client **clients, int *totalClients, char *cpf)
             }
             free((*clients)[i].emails); //libera o vetor de emails
 
-            for (int j = 0; j < (*clients)[i].totalPhones; j++) //percorre todos os telefones do cliente
+            for (int j = 0; j < (*clients)[i].totalPhones; j++)
             {
-                free((*clients)[i].phones[j]); //libera cada telefone
+                free((*clients)[i].phones[j]);
             }
-            free((*clients)[i].phones); //libera o vetor de telefones
+            free((*clients)[i].phones);
 
-            //move os clientes restantes para preencher a lacuna
+            //move os clientes restantes para preencher
             for (int k = i; k < *totalClients - 1; k++)
             {
-                (*clients)[k] = (*clients)[k + 1]; //sobrescreve o cliente a ser removido com o próximo
+                (*clients)[k] = (*clients)[k + 1]; 
             }
 
             //reduz o total de clientes e realoca a memória
             (*totalClients)--;
-            client *temp = realloc(*clients, (*totalClients) * sizeof(client)); //realoca a memória para o novo tamanho do vetor de clientes
+            client *temp = realloc(*clients, (*totalClients) * sizeof(client)); //realoca a memória para o novo tamanho
 
-            if (temp != NULL || *totalClients == 0) // Verifica se a realocação de certo ou se não tem mais clientes
+            if (temp != NULL || *totalClients == 0)
             {
                 *clients = temp; //att o ponteiro para o novo endereço de memória
                 printf("Cliente removido com sucesso!\n");
@@ -976,18 +973,18 @@ int courseRegistration(
     {
         if (c[i].code == code) //verifica se o código já existe
         {
-            return 0; //para a execução
+            return 0;
         }
     }
 
-    course *newCourse = &c[*totalCourses]; /* se já existirem cursos, "newCourse" apontará para a próxima posição livre */
+    course *newCourse = &c[*totalCourses]; //se já existirem cursos, "newCourse" apontará para a próxima posição livre
 
     newCourse->code = code;
 
-    newCourse->name = malloc(strlen(name) + 1); //alocação dinâmica
+    newCourse->name = malloc(strlen(name) + 1);
     strcpy(newCourse->name, name);
 
-    newCourse->description = malloc(strlen(description) + 1); //alocação dinâmica
+    newCourse->description = malloc(strlen(description) + 1);
     strcpy(newCourse->description, description);
 
     newCourse->durationHours = durationHours;
@@ -1014,10 +1011,10 @@ void registerCourse(course **courses, int *totalCourses) {
     } while (!validateCourseCode(code));
 
     printf("Nome do curso: ");
-    scanf(" %[\n]", name);
+    scanf("%s \n", name);
 
     printf("Descrição do curso: ");
-    scanf(" %[\n]", description);
+    scanf("%s", description);
 
     do {
         printf("Duração (horas): ");
@@ -1042,7 +1039,7 @@ void registerCourse(course **courses, int *totalCourses) {
         if (!validateCoursePrice(price)) printf("Preço inválido!\n");
     } while (!validateCoursePrice(price));
 
-    course *temp = realloc(*courses, (*totalCourses + 1) * sizeof(course));
+    course *temp = realloc(*courses, (*totalCourses + 1) * sizeof(course));//realoca a memória para o novo curso
 
     if (temp == NULL) {
         printf("Erro de memória!\n");
@@ -1248,6 +1245,14 @@ void deleteCourse(course **courses, int *totalCourses, int code)
     printf("Curso não encontrado!\n");
 }
 
+//MATRÍCULAS
+
+//ARQUIVOS
+
+//RELATÓRIOS
+
+
+
 
 int main()
 {
@@ -1256,7 +1261,8 @@ int main()
     int mainMenu = -1;
     client *clients = NULL;
     int totalClients = 0;
-    course *courses = NULL;  // vetor dinâmico de cursos
+
+    course *courses = NULL;  
     int totalCourses = 0;
 
     do
@@ -1433,7 +1439,7 @@ int main()
                     printf("\nOpção inválida\n");
                     break;
 
-                } //fim switch courseOption
+                }
 
             } while (courseOption != 0);
 
