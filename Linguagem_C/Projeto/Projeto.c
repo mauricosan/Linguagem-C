@@ -292,7 +292,7 @@ void registerCustomer(client **clients, int *totalClients) { //função de cadas
     char gender;
 
     printf("\nNome: ");
-    scanf(" %[^\n]", name);
+    scanf(" %99[^\n]", name);
 
     do {
         printf("CPF: ");
@@ -639,7 +639,9 @@ int updateStudent(client *clients, char *cpf, int totalClients)
                     printf("Gênero atualizado com sucesso!\n");
                     break;
 
-                case 4:
+                case 4: {
+                    int novoTotal;
+
                     //libera emails antigos antes de recriar
                     for (int j = 0; j < clients[i].totalEmails; j++) {
                         free(clients[i].emails[j]);
@@ -648,8 +650,10 @@ int updateStudent(client *clients, char *cpf, int totalClients)
 
                     // pergunta quantos emails o cliente terá agora
                     printf("Informe quantos e-mails deseja adicionar: ");
-                    scanf("%d", &clients[i].totalEmails);
+                    scanf("%d", &novoTotal);
                     getchar(); //limpa o enter do buffer
+
+                    clients[i].totalEmails = novoTotal;
 
                     // aloca novo vetor de emails
                     char **emailsTemp = malloc(clients[i].totalEmails * sizeof(char*));
@@ -686,8 +690,11 @@ int updateStudent(client *clients, char *cpf, int totalClients)
                     // mensagem de sucesso
                     printf("Emails atualizados!\n");
                     break;
+                }
 
-                case 5:
+                case 5: {
+                    int novoTotal;
+
                     // libera telefones antigos antes de recriar
                     for (int j = 0; j < clients[i].totalPhones; j++) {
                         free(clients[i].phones[j]);
@@ -695,8 +702,10 @@ int updateStudent(client *clients, char *cpf, int totalClients)
                     free(clients[i].phones); // libera o vetor antigo
 
                     printf("Quantos telefones? ");
-                    scanf("%d", &clients[i].totalPhones);
+                    scanf("%d", &novoTotal);
                     getchar();
+
+                    clients[i].totalPhones = novoTotal;
 
                     //aloca novo vetor de telefones
                     char **phonesTemp = malloc(clients[i].totalPhones * sizeof(char*)); // nova alocação segura
@@ -720,9 +729,11 @@ int updateStudent(client *clients, char *cpf, int totalClients)
 
                     printf("Telefones atualizados!\n");
                     break;
+                }
 
                 case 6: {
                         char tempName[100];
+                        int novoTotalEmails, novoTotalPhones;
 
                         int c;
                         while ((c = getchar()) != '\n' && c != EOF);//limpa o buffer antes de ler a string
@@ -772,7 +783,7 @@ int updateStudent(client *clients, char *cpf, int totalClients)
                         if (clients[i].gender == 'f') clients[i].gender = 'F';
 
                         printf("Quantos emails? ");
-                        scanf("%d", &clients[i].totalEmails);
+                        scanf("%d", &novoTotalEmails);
                         getchar();
 
                         // libera emails antigos antes de recriar
@@ -780,6 +791,8 @@ int updateStudent(client *clients, char *cpf, int totalClients)
                             free(clients[i].emails[j]);
                         }
                         free(clients[i].emails);
+
+                        clients[i].totalEmails = novoTotalEmails;
 
                         // aloca novo vetor de emails
                         char **emailsTemp2 = malloc(clients[i].totalEmails * sizeof(char*)); //nova alocação
@@ -802,7 +815,7 @@ int updateStudent(client *clients, char *cpf, int totalClients)
                         }
 
                         printf("Quantos telefones? ");
-                        scanf("%d", &clients[i].totalPhones);
+                        scanf("%d", &novoTotalPhones);
                         getchar();
 
                         //libera telefones antigos antes de recriar
@@ -810,6 +823,8 @@ int updateStudent(client *clients, char *cpf, int totalClients)
                             free(clients[i].phones[j]);
                         }
                         free(clients[i].phones);
+
+                        clients[i].totalPhones = novoTotalPhones;
 
                         //aloca novo vetor de telefones
                         char **phonesTemp2 = malloc(clients[i].totalPhones * sizeof(char*)); // nova alocação
@@ -1011,10 +1026,10 @@ void registerCourse(course **courses, int *totalCourses) {
     } while (!validateCourseCode(code));
 
     printf("Nome do curso: ");
-    scanf("%s \n", name);
+    scanf(" %s", name);
 
     printf("Descrição do curso: ");
-    scanf("%s", description);
+    scanf(" %s", description);
 
     do {
         printf("Duração (horas): ");
@@ -1130,7 +1145,7 @@ int updateCourse(course *courses, int totalCourses, int code)
                 case 1: {
                     char temp[100];
                     printf("Novo nome: ");
-                    scanf(" %[^\n]", temp);
+                    scanf(" %99s", temp);
 
                     char *newName = realloc(courses[i].name, strlen(temp) + 1); // realoca memória para o nome
 
@@ -1145,7 +1160,7 @@ int updateCourse(course *courses, int totalCourses, int code)
                 case 2: {
                     char temp[255];
                     printf("Nova descrição: ");
-                    scanf(" %[^\n]", temp);
+                    scanf(" %254s", temp);
 
                     char *newDesc = realloc(courses[i].description, strlen(temp) + 1); // realoca memória para a descrição
 
